@@ -1,0 +1,22 @@
+.login-container .login-content .form-container .reginfo {
+    
+    padding-right: 16px;
+    min-width: 300px;
+}
+#signForm {
+    max-width: 600px; /* Adjust the maximum width as needed */
+    margin: 0 auto; /* Center the form */
+  }
+.signForm{
+    max-width: 600px; /* Adjust the maximum width as needed */
+    margin: 0 auto; 
+}
+.is-invalid {
+    border-color: red !important;
+    color: red;
+    
+}
+.invalid-feedback{
+    color: red;
+    margin-top: 0px;
+}

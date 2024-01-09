@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Header from '../Header/Header';
 import './JobForm.css';
-import FormPreview from '../FormPre/FormPre';
+import Loader from '../Loader/Loader';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 const initialValues = {
@@ -72,6 +72,7 @@ const JobApplicationForm = () => {
   const [ApplicantData, setApplicantData] = useState([]);
   const [error, setError] = useState(null);
   const [application, setApplication] = useState()
+  const[loader, setLoader] = useState(true);
 
   const formik = useFormik({
     initialValues,
@@ -127,8 +128,10 @@ const JobApplicationForm = () => {
         const data = await response.json();
         setApplicantData(data);
         setApplication(true)
+        setLoader(false)
       } catch (error) {
         setApplication(false)
+        setLoader(false)
         setError('Error fetching ApplicantData');
       }
     };
@@ -137,18 +140,6 @@ const JobApplicationForm = () => {
   }, []);
 
 
-  // const handlePreview = () => {
-  //   if (formik.isValid) {
-  //     console.log('I am on submit');
-  //     console.log(formik.values);
-  //     // Redirect to the preview page and pass form values as state
-  //     // navigate('/preview', { state: { values: formik.values } });
-  //     const previewWindow = window.open('/preview', { state: { values: formik.values } });
-
-  //   // Pass form values as state to the new window or tab
-  //   // previewWindow && previewWindow.postMessage({ values: formik.values }, '*');
-  //   }
-  // };
   const handlePreview = () => {
     if (formik.isValid) {
       console.log('I am on submit');
@@ -165,26 +156,22 @@ const JobApplicationForm = () => {
     }
   };
   console.log('Formik errors:', formik.errors);
-  if (application) {
-    return (
-      <div className="success-message">
-          <p>Your form has been submitted successfully!</p>
-          <p>Your Application Number :&nbsp;{ApplicantData.application_number}</p>
-          <p>Please complete Part II</p>
-        </div>
-    );
-}
+ 
 
   console.log(ApplicantData)
   return (
     <main className='form-container'>
-      {/* {(application) ? (
-        <div className="success-message">
+      {loader ? (
+        <Loader />
+      ) 
+      : 
+      application ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Your form has been submitted successfully!</p>
           <p>Your Application Number :&nbsp;{ApplicantData.application_number}</p>
           <p>Please complete Part II</p>
         </div>
-      ) : ( */}
+      ) : ( 
         <div >
           <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
             {/* Post */}
@@ -522,7 +509,7 @@ const JobApplicationForm = () => {
           <button  onClick={handlePreview} style={{width:'95%',margin:'15px'}}>Preview</button>
 
         </div>
-      {/* )} */}
+       )} 
     </main>
   );
 };

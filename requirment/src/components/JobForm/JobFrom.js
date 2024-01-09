@@ -528,3 +528,25 @@ const JobApplicationForm = () => {
 };
 
 export default JobApplicationForm;
+
+
+// useEffect(() => {
+//   const fetchUserData = async () => {
+//     try {
+//       const token = localStorage.getItem("token"); // Replace 'your_bearer_token' with the actual bearer token
+//       const response = await fetch('http://127.0.0.1:8000/api/user-information/', {
+//         headers: {
+//           'Authorization': `Bearer ${token}`,
+//         },
+//       });
+
+//       if (!response.ok) {
+//         throw new Error('Failed to fetch ApplicantData');
+//       }
+
+//       const data = await response.json();
+//       setUserData(data);
+//     } catch (error) {
+//       setError('Error fetching ApplicantData');
+//     }
+//   };

@@ -6,38 +6,39 @@ function Header() {
     let token = localStorage.getItem('token');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const checkTokenExpiration = () => {
-            const tokenExpiration = localStorage.getItem('tokenExpiration');
-            if (tokenExpiration) {
-                const expirationDate = new Date(tokenExpiration);
-                const currentDate = new Date();
+    // useEffect(() => {
+    //     const checkTokenExpiration = () => {
+    //         const tokenExpiration = localStorage.getItem('tokenExpiration');
+    //         if (tokenExpiration) {
+    //             const expirationDate = new Date(tokenExpiration);
+    //             const currentDate = new Date();
                     
-                if (currentDate >= expirationDate) {
-                    // Token is expired, redirect to login page
-                    console.log("expire")
-                    navigate('/');
+    //             if (currentDate >= expirationDate) {
+    //                 // Token is expired, redirect to login page
+    //                 console.log("expire")
+    //                 navigate('/');
 
-                }
-            } else {
-                // Token expiration not found, redirect to login page
-                navigate('/');
-            }
-        };
+    //             }
+    //         } else {
+    //             // Token expiration not found, redirect to login page
+    //             navigate('/');
+    //         }
+    //     };
 
-        // Check token expiration on component mount
-        checkTokenExpiration();
+    //     // Check token expiration on component mount
+    //     checkTokenExpiration();
 
-        // Set up interval to check token expiration periodically
-        const interval = setInterval(() => {
-            checkTokenExpiration();
-        }, 60000); // Check every minute, adjust as needed
+    //     // Set up interval to check token expiration periodically
+    //     const interval = setInterval(() => {
+    //         checkTokenExpiration();
+    //     }, 60000); // Check every minute, adjust as needed
 
-        // Clean up interval on component unmount
-        return () => clearInterval(interval);
-    }, [navigate]);
+    //     // Clean up interval on component unmount
+    //     return () => clearInterval(interval);
+    // }, [navigate]);
 
-    const handleLogout = () => {
+    const handleLogout = (e) => {
+        e.preventDefault();
         // Remove the token from local storage
         localStorage.removeItem('token');
         localStorage.removeItem('tokenExpiration');
@@ -68,10 +69,11 @@ function Header() {
                         <strong>Help Desk no-: XXXXXXXXX | XXXXXXXXX (10 AM to 6 PM)&nbsp;
                         </strong>
                         <br></br>
-                        <strong>Help Desk Email -: XXXXXXXXXXX@gmail.com &nbsp; {token ?
+                        <strong>Help Desk Email -: XXXXXXXXXXX@gmail.com &nbsp; 
+                            {token ?
                             <button onClick={handleLogout} className='logout'>Logout</button> :
-                            null
-                        }&nbsp;</strong>
+                            null}
+                        &nbsp;</strong>
                     </p>
 
 

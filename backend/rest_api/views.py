@@ -84,33 +84,7 @@ class ApplicantInformationView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except ApplicantInformation.DoesNotExist:
             return Response({"detail": "Applicant information not found."}, status=status.HTTP_404_NOT_FOUND)
-
-
-
-# class UploadFilesAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
-    # parser_classes = (MultiPartParser, FormParser)
-
-    # def post(self, request, *args, **kwargs):
-    #     # Assuming you have a valid authentication token
-    #     user = request.user
-
-    #     try:
-    #         job_application = ApplicantInformation.objects.get(user=user)
-    #     except ApplicantInformation.DoesNotExist:
-    #         return Response({"detail": "Job application not found for the authenticated user."},
-    #                         status=status.HTTP_404_NOT_FOUND)
-
-    #     # Check if the user is the owner of the job application
-    #     if request.user.id != job_application.user.id:
-    #         return Response({"detail": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
-
-    #     serializer = JobApplicationSerializer(job_application, data=request.data, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+       
 class UploadFilesAPIView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
@@ -158,3 +132,17 @@ class ApplicantByPostAPIView(APIView):
         applicants = ApplicantInformation.objects.filter(post=post)
         serializer = ApplicantInformationSerializer(applicants, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserInformationAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        try:
+            user_data = {
+                'name': user.name,  
+                'email': user.email,
+                'mobile_number': user.mobile_number,
+            }
+            return Response(user_data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

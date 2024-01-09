@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import './UploadFile.css'
+import Loader from '../Loader/Loader';
 const MAX_IMAGE_SIZE_KB = 100;
 const MAX_SIGNATURE_SIZE_KB = 100;
 
@@ -11,6 +12,7 @@ const ImageSignatureForm = () => {
     const [selectedSignaturePreview, setSelectedSignaturePreview] = useState(null);
     const [ApplicantData, setApplicantData] = useState([]);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const handleImageChange = (event) => {
@@ -108,7 +110,9 @@ const ImageSignatureForm = () => {
 
                 const data = await response.json();
                 setApplicantData(data);
+                setLoading(false);
             } catch (error) {
+                setLoading(false);
                 setError('Error fetching ApplicantData');
             }
         };
@@ -120,61 +124,64 @@ const ImageSignatureForm = () => {
 
     return (
         <main className="content">
-            {pic ? (
-                <div className="success-message">
-                    <p>Your form has been submitted successfully!</p>
-                    <p>Your Application Number :&nbsp;{ApplicantData.application_number}</p>
-                </div>
-            ) : (
-                <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
-
-                    <div className="image-box">
-                        <div className="file-upload">
-                            <label htmlFor="image">Image:</label>
-                            <p style={{ color: 'red' }}>Note: image size should be 20 to 100 KB and Image Diamantion height: 100px width: 100px</p>
-                            <input
-                                type="file"
-                                id="image"
-                                name="image"
-                                onChange={validateAndSetImage}
-                            />
-                            {selectedImagePreview ? (
-                                <img src={selectedImagePreview} alt="Selected Image" style={{ height: '100px', width: '100px' }} />
-                            ) : (
-                                <img src={'https://rkmvdeoghar.org//domains/rkmvdeoghar.org/documents/old_images/Sample-Passport-photo-251x300.jpg'} 
-                                alt="Dummy Image" style={{ height: '100px', width: '100px', border: '1px solid #ddd', padding: '5px' }} />
-                            )}
-                            {formik.errors.image && formik.touched.image && (
-                                <div style={{ color: 'red' }}>{formik.errors.image}</div>
-                            )}
-                        </div>
-
-                        <div className="file-upload">
-                            <label htmlFor="signature">Signature:</label>
-                            <p style={{ color: 'red' }}>Note: image size should be 20 to 100 KB and Image Diamantion height: 50px width: 200px</p>
-                            <input
-                                type="file"
-                                id="signature"
-                                name="signature"
-                                onChange={validateAndSetSignature}
-                            />
-                            {selectedSignaturePreview ? (
-                                <img src={selectedSignaturePreview} alt="Selected Signature" style={{ height: '80px', width: '250px' }} />
-                            ) : (
-                                <img src={'https://clipart-library.com/data_images/26386.jpg'} 
-                                alt="Dummy Image" style={{ height: '80px', width: '250px', border: '1px solid #ddd', padding: '5px' }} />
-                            )}
-                            {/* {selectedSignaturePreview && <img src={selectedSignaturePreview} alt="Selected Signature" style={{ height: '50px', width: '200px' }} />} */}
-                            {formik.errors.signature && formik.touched.signature && (
-                                <div style={{ color: 'red' }}>{formik.errors.signature}</div>
-                            )}
-                        </div>
+            {loading ?
+                <Loader />
+                :
+                (pic ? (
+                    <div className='form-container' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <p>Your form has been submitted successfully!</p>
+                        <p>Your Application Number: {ApplicantData.application_number}</p>
                     </div>
+                ) : (
+                    <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
 
-                    <button type="submit" style={{ width: '100%' }}>Upload</button>
-                </form>
-            )}
+                        <div className="image-box">
+                            <div className="file-upload">
+                                <label htmlFor="image">Image:</label>
+                                <p style={{ color: 'red' }}>Note: image size should be 20 to 100 KB and Image Diamantion height: 100px width: 100px</p>
+                                <input
+                                    type="file"
+                                    id="image"
+                                    name="image"
+                                    onChange={validateAndSetImage}
+                                />
+                                {selectedImagePreview ? (
+                                    <img src={selectedImagePreview} alt="Selected Image" style={{ height: '100px', width: '100px' }} />
+                                ) : (
+                                    <img src={'https://rkmvdeoghar.org//domains/rkmvdeoghar.org/documents/old_images/Sample-Passport-photo-251x300.jpg'}
+                                        alt="Dummy Image" style={{ height: '100px', width: '100px', border: '1px solid #ddd', padding: '5px' }} />
+                                )}
+                                {formik.errors.image && formik.touched.image && (
+                                    <div style={{ color: 'red' }}>{formik.errors.image}</div>
+                                )}
+                            </div>
+
+                            <div className="file-upload">
+                                <label htmlFor="signature">Signature:</label>
+                                <p style={{ color: 'red' }}>Note: image size should be 20 to 100 KB and Image Diamantion height: 50px width: 200px</p>
+                                <input
+                                    type="file"
+                                    id="signature"
+                                    name="signature"
+                                    onChange={validateAndSetSignature}
+                                />
+                                {selectedSignaturePreview ? (
+                                    <img src={selectedSignaturePreview} alt="Selected Signature" style={{ height: '80px', width: '250px' }} />
+                                ) : (
+                                    <img src={'https://clipart-library.com/data_images/26386.jpg'}
+                                        alt="Dummy Image" style={{ height: '80px', width: '250px', border: '1px solid #ddd', padding: '5px' }} />
+                                )}
+                                {formik.errors.signature && formik.touched.signature && (
+                                    <div style={{ color: 'red' }}>{formik.errors.signature}</div>
+                                )}
+                            </div>
+                        </div>
+
+                        <button type="submit" style={{ width: '100%' }}>Upload</button>
+                    </form>
+                ))}
         </main>
+
     );
 };
 

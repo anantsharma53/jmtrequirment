@@ -1,8 +1,8 @@
 import './Login.css'
 import { useEffect, useState } from 'react'
-import { Link,useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import Header from '../Header/Header';
-import Sign from '../SignUp/Sign';
 function Login() {
     const [user, setUser] = useState({
         username: "",
@@ -24,8 +24,8 @@ function Login() {
         setShowSignup(!showSignup);
     };
     let navigate = useNavigate();
-    function handleSubmit() {
-
+    function handleSubmit(e) {
+        e.preventDefault();
         fetch("http://127.0.0.1:8000/api/signin/", {
           method: "POST",
           body: JSON.stringify(user),

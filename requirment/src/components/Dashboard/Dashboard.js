@@ -7,9 +7,12 @@ import JobApplicationForm from '../JobForm/JobFrom';
 import ImageSignatureForm from '../UploadFile/UploadFile';
 import ApplicantProfile from '../Displayform/Displayform';
 import jwtDecode from 'jwt-decode';
+import FormPreview from '../FormPre/FormPre';
+import SessionExpired from '../SessionExpired/SessionExpired';
 
 const Layout = () => {
   const [selectedMenu, setSelectedMenu] = useState('menu-item-1');
+  const [isSessionExpired, setSessionExpired] = useState(false);
   const navigate = useNavigate();
 
   const handleMenuClick = (menuItem) => {
@@ -36,6 +39,7 @@ const Layout = () => {
           const currentTime = Date.now() / 1000;
           return decodedToken.exp < currentTime;
         } catch (error) {
+
           return true;
         }
       }
@@ -44,15 +48,17 @@ const Layout = () => {
     };
 
     // Redirect to login page if token is expired
-    if (isTokenExpired()) {
+    setSessionExpired(isTokenExpired());
+  }, [selectedMenu]);
+
+  const renderContent = () => {
+    if (isSessionExpired) {
       localStorage.removeItem('token');
       localStorage.removeItem('tokenExpiration');
       localStorage.removeItem('user_details');
       navigate('/sessionexpires');
     }
-  }, [navigate]);
 
-  const renderContent = () => {
     switch (selectedMenu) {
       case 'menu-item-1':
         return <JobApplicationForm />;

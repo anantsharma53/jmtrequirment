@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 ]
 SIMPLE_JWT = {
     # Set the token expiration time for access token (default is 5 minutes)
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Change this value as desired
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Change this value as desired
 
     # Set the token expiration time for refresh token (default is 1 day)
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Change this value as desired

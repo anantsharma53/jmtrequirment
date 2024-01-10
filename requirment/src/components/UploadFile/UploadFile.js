@@ -67,6 +67,7 @@ const ImageSignatureForm = () => {
 
             if (response.ok) {
                 console.log('Form submitted successfully');
+                window.location.reload();
                 navigate("/dashboard");
             } else {
                 console.error('Error submitting form:', response.statusText);

@@ -2,48 +2,19 @@ import './Header.css'
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 function Header() {
     let token = localStorage.getItem('token');
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     const checkTokenExpiration = () => {
-    //         const tokenExpiration = localStorage.getItem('tokenExpiration');
-    //         if (tokenExpiration) {
-    //             const expirationDate = new Date(tokenExpiration);
-    //             const currentDate = new Date();
-                    
-    //             if (currentDate >= expirationDate) {
-    //                 // Token is expired, redirect to login page
-    //                 console.log("expire")
-    //                 navigate('/');
-
-    //             }
-    //         } else {
-    //             // Token expiration not found, redirect to login page
-    //             navigate('/');
-    //         }
-    //     };
-
-    //     // Check token expiration on component mount
-    //     checkTokenExpiration();
-
-    //     // Set up interval to check token expiration periodically
-    //     const interval = setInterval(() => {
-    //         checkTokenExpiration();
-    //     }, 60000); // Check every minute, adjust as needed
-
-    //     // Clean up interval on component unmount
-    //     return () => clearInterval(interval);
-    // }, [navigate]);
-
+    
+    
+    
     const handleLogout = (e) => {
         e.preventDefault();
         // Remove the token from local storage
         localStorage.removeItem('token');
         localStorage.removeItem('tokenExpiration');
         localStorage.removeItem('user_details');
-
         // Redirect to the login page
         navigate('/');
     };

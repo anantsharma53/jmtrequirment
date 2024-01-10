@@ -6,6 +6,7 @@ import './JobForm.css';
 import Loader from '../Loader/Loader';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import FormPreview from '../FormPre/FormPre';
 const initialValues = {
   post: '',
   applicantName: '',
@@ -73,40 +74,13 @@ const JobApplicationForm = () => {
   const [error, setError] = useState(null);
   const [application, setApplication] = useState()
   const[loader, setLoader] = useState(true);
-
+  const [preview, setPreview]=useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values, { resetForm }) => {
-      fetch("http://127.0.0.1:8000/api/job-application/", {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-
-        },
-
-      })
-        .then((res) => {
-          console.log(res);
-          if (res.status === 201) {
-            // document.getElementById("signForm").reset();
-            // setFlashMessage("Registration successful!");
-            // setTimeout(removeFlashMessage, 1000);
-            console.log('Form submitted:', values);
-            navigate("/dasboard");
-          } else if (res.status === 401) {
-            console.log("Unauthorized request");
-            navigate("/");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      // Send data to the server
-      //  resetForm();
+      
     },
 
 
@@ -137,22 +111,15 @@ const JobApplicationForm = () => {
     };
 
     fetchApplicantApplicantData();
-  }, []);
+  }, [preview]);
 
 
   const handlePreview = () => {
     if (formik.isValid) {
       console.log('I am on submit');
+      setPreview(true);
       console.log(formik.values);
-
-      // Store form values in localStorage
-      localStorage.setItem('formValues', JSON.stringify(formik.values));
-
-      // Open the preview page in a new window or tab
-      const previewWindow = window.open('/preview');
-
-      // Optionally, you can focus on the new window
-      previewWindow && previewWindow.focus();
+      
     }
   };
   console.log('Formik errors:', formik.errors);
@@ -160,7 +127,9 @@ const JobApplicationForm = () => {
 
   console.log(ApplicantData)
   return (
-    <main className='form-container'>
+    <>
+    {!preview?
+    (<main className='form-container'>
       {loader ? (
         <Loader />
       ) 
@@ -510,7 +479,9 @@ const JobApplicationForm = () => {
 
         </div>
        )} 
-    </main>
+    </main>):
+    <FormPreview formValues={JSON.stringify(formik.values)}/>
+}</>
   );
 };
 

@@ -12,6 +12,7 @@ import Layout from './components/Dashboard/Dashboard';
 import ApplicantList from './components/Allaplication/Allaplication';
 
 import SessionExpired from './components/SessionExpired/SessionExpired';
+import YourComponent from './components/Test/Test';
 function App() {
   return (
 
@@ -20,7 +21,8 @@ function App() {
       <Route path='/register' element={<Sign />} />
         <Route path='/' element={<Login />} />
         <Route path='/dashboard' element={<Layout />} />
-        
+        <Route path='/preview' element={<FormPreview />} />
+        <Route path='/test' element={<YourComponent/>}/>
         <Route path='/applicantList' element={<ApplicantList/>}/>
         <Route path='/sessionexpires' element={<SessionExpired/>}/>
       </Routes>

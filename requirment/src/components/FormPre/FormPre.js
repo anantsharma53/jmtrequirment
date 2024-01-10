@@ -4,21 +4,13 @@ import { useLocation } from 'react-router-dom';
 import { useEffect, useState, } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './FormPre.css';
-const FormPreview = () => {
-    const [values, setValues] = useState({});
-    const location = useLocation();
+const FormPreview = ({ formValues }) => {
+    const values = JSON.parse(formValues);
+    const [formSubmitted, setFormSubmitted] = useState(false);
     let token = localStorage.getItem("token");
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // Retrieve form values from localStorage
-        const storedValues = localStorage.getItem('formValues');
-        if (storedValues) {
-            const parsedValues = JSON.parse(storedValues);
-            // Update the state with the form values
-            setValues(parsedValues);
-        }
-    }, []);
+   
 
     const handleSubmit = () => {
         fetch("http://127.0.0.1:8000/api/job-application/", {
@@ -38,7 +30,9 @@ const FormPreview = () => {
                     // setFlashMessage("Registration successful!");
                     // setTimeout(removeFlashMessage, 1000);
                     console.log('Form submitted:', values);
+                    window.location.reload();
                     navigate("/dashboard");
+
                 } else if (res.status === 401) {
                     console.log("Unauthorized request");
                     navigate("/");
@@ -68,7 +62,7 @@ const FormPreview = () => {
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
 
 
             <div className="applicant-details-container">
